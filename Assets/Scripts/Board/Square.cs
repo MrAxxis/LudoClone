@@ -7,12 +7,13 @@ public class Square : MonoBehaviour
     bool Occupied = false;
     Color colour = Color.white;
 
-    // contstructor 
-    public Square(Color colour)
-    {
-        this.colour = colour;
-    }
 
+    public void Init(Color colour)
+    {
+        {
+            this.colour = colour;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {

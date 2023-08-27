@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class Board: MonoBehaviour
 {
-    public List<Square> Track;
+    public List<GameObject> Track;
+
+    public GameObject SquarePrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,16 +19,26 @@ public class Board: MonoBehaviour
     /// </summary>
     /// <param name="numberOfPlayers"></param>
     /// <returns> new List of Squares </returns>
-    private List<Square> CreateTheTrack(int numberOfPlayers)
+    private List<GameObject> CreateTheTrack(int numberOfPlayers)
     {
         // create an empty track
-        List<Square> newTrack = new List<Square>();
+        List<GameObject> newTrack = new List<GameObject>();
 
         for (int i = 0; i < numberOfPlayers; i++)
         {
             // Pick a new random colour and assign it to the next home square
             Color newColour = UnityEngine.Random.ColorHSV();
-            newTrack.Add(new Square(newColour));
+            
+            // Instantiate a new game object square
+            GameObject newSquare = Instantiate(SquarePrefab, this.transform);
+
+            // Add the HomeSquare component to the new game object and init the square
+            newSquare.AddComponent<HomeSquare>().Init(newColour);
+
+            // Add the new square to the Track list
+            newTrack.Add(newSquare);
+
+
         }
         throw new NotImplementedException();
     }
