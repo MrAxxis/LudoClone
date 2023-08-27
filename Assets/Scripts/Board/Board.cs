@@ -16,6 +16,8 @@ public class Board : MonoBehaviour
 
     #endregion
 
+    public List<Color> PlayerColours;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,36 +35,48 @@ public class Board : MonoBehaviour
         List<GameObject> newTrack = new List<GameObject>();
 
         for (int i = 0; i < numberOfPlayers; i++)
-        {
-            SpawnSquare(newTrack, StartSquarePrefab);
-            for (int spawnCounter = 0; spawnCounter < squaresBetweenBases; spawnCounter++)
+        {        
+            // Pick a new random colour and assign it to the next home square
+            Color newColour = UnityEngine.Random.ColorHSV();
+
+            // adds the new colour to the player colours
+            PlayerColours.Add(newColour);
+
+            // spawn the start square
+            SpawnSquare(newTrack, StartSquarePrefab, newColour);
+
+            // spawn the blank squares in between
+            for (int normalCounter = 0; normalCounter < squaresBetweenBases; normalCounter++)
             {
-                SpawnSquare(newTrack, SquarePrefab);
+                SpawnSquare(newTrack, SquarePrefab, Color.white);
             }
 
+            // spawn the home squares
+            for (int homeCounter = 0; homeCounter < numberOfPlayers; homeCounter++)
+            {
+                SpawnSquare(newTrack, HomeSquarePrefab, newColour);
+            }
 
         }
-        throw new NotImplementedException();
+
+        return newTrack;
     }
 
-    private void SpawnSquare(List<GameObject> newTrack, GameObject squareType)
+    /// <summary>
+    /// Spawns a square according to <paramref name="squareType"></paramref></param>,
+    /// assigns it <paramref name="colour"></paramref></param>, 
+    /// adds it into the <paramref name="newTrack"></param>
+    /// </summary>
+    private void SpawnSquare(List<GameObject> newTrack, GameObject squareType, Color colour)
     {
-        // Pick a new random colour and assign it to the next home square
-        Color newColour = UnityEngine.Random.ColorHSV();
 
         // Instantiate a new game object square
         GameObject newSquare = Instantiate(squareType, this.transform);
 
         // Init the square that was just added
-        newSquare.GetComponent<Square>().Init(newColour);
+        newSquare.GetComponent<Square>().Init(colour);
 
         // Add the new square to the Track list
         newTrack.Add(newSquare);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
